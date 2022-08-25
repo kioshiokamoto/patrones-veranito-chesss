@@ -1,11 +1,11 @@
-package UI.pieces;
+package ui.pieces;
+
+import ui.board.ChessGameBoard;
 
 import javax.swing.ImageIcon;
-
-import UI.ChessGamePiece;
-import UI.board.ChessGameBoard;
-
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 // -------------------------------------------------------------------------
 /**
@@ -16,8 +16,9 @@ import java.util.ArrayList;
  * @author Danielle Bushrow (dbushrow)
  * @version 2010.11.17
  */
-public class Rook
-        extends ChessGamePiece {
+public class Rook extends ChessGamePiece {
+    private Map<Integer, String> iconsMap;
+
     // ----------------------------------------------------------
     /**
      * Create a new Rook object.
@@ -39,7 +40,7 @@ public class Rook
      * Calculates the possible moves for this Rook.
      * 
      * @param board the board to check on
-     * @return ArrayList<String> the list of moves
+     * @return ArrayList<> the list of moves
      */
     @Override
     protected ArrayList<String> calculatePossibleMoves(ChessGameBoard board) {
@@ -62,15 +63,12 @@ public class Rook
      */
     @Override
     public ImageIcon createImageByPieceType() {
-        if (getColorOfPiece() == ChessGamePiece.WHITE) {
-            return new ImageIcon(
-                    getClass().getResource("chessImages/WhiteRook.gif"));
-        } else if (getColorOfPiece() == ChessGamePiece.BLACK) {
-            return new ImageIcon(
-                    getClass().getResource("chessImages/BlackRook.gif"));
-        } else {
-            return new ImageIcon(
-                    getClass().getResource("chessImages/default-Unassigned.gif"));
-        }
+        iconsMap = new HashMap<>();
+
+        iconsMap.put(-1, "../../resources/chessImages/default-Unassigned.gif");
+        iconsMap.put(ChessGamePiece.BLACK, "../../resources/chessImages/BlackRook.gif");
+        iconsMap.put(ChessGamePiece.WHITE, "../../resources/chessImages/WhiteRook.gif");
+
+        return new ImageIcon(getClass().getResource(this.iconsMap.get(getColorOfPiece())));
     }
 }

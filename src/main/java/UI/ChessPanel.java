@@ -1,13 +1,13 @@
-package UI;
+package ui;
 
 import java.awt.*;
 import javax.swing.*;
 
-import UI.board.ChessGameBoard;
 import logic.ChessGameEngine;
 import logic.ChessGameLog;
 import logic.ChessGraveyard;
 import logic.ChessMenuBar;
+import ui.board.ChessGameBoard;
 
 // -------------------------------------------------------------------------
 /**

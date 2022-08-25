@@ -1,9 +1,8 @@
-package UI.pieces;
+package ui.pieces;
 
 import javax.swing.ImageIcon;
 
-import UI.ChessGamePiece;
-import UI.board.ChessGameBoard;
+import ui.board.ChessGameBoard;
 
 import java.util.ArrayList;
 
@@ -77,47 +76,49 @@ public class Pawn
      *
      * @param board
      *              the game board to calculate moves on
-     * @return ArrayList<String> the moves
+     * @return ArrayList<> the moves
      */
     @Override
-    protected ArrayList<String> calculatePossibleMoves(ChessGameBoard board) {
-        ArrayList<String> moves = new ArrayList<>();
-        if (isPieceOnScreen()) {
-            int currRow = getColorOfPiece() == ChessGamePiece.WHITE
-                    ? (pieceRow - 1)
-                    : (pieceRow + 1);
-            int count = 1;
-            int maxIter = notMoved ? 2 : 1;
-            // check for normal moves
-            while (count <= maxIter) { // only loop while we have open slots and have not passed our
-                // limit
-                if (isOnScreen(currRow, pieceColumn)
-                        && board.getCell(currRow,
-                                pieceColumn).getPieceOnSquare() == null) {
-                    moves.add(currRow + "," + pieceColumn);
-                } else {
-                    break;
-                }
-                currRow = (getColorOfPiece() == ChessGamePiece.WHITE)
-                        ? (currRow - 1)
-                        : (currRow + 1);
-                count++;
-            }
-            // check for enemy capture points
-            if (getColorOfPiece() == ChessGamePiece.WHITE) {
-                if (isEnemy(board, pieceRow - 1, pieceColumn - 1)) {
-                    moves.add((pieceRow - 1) + "," + (pieceColumn - 1));
-                }
-                if (isEnemy(board, pieceRow - 1, pieceColumn + 1)) {
-                    moves.add((pieceRow - 1) + "," + (pieceColumn + 1));
-                }
+    protected final ArrayList<String> calculatePossibleMoves(ChessGameBoard board) {
+        ArrayList<String> moves;
+        if (!isPieceOnScreen())
+            return new ArrayList<>();
+        moves = new ArrayList<>();
+
+        int currRow = getColorOfPiece() == ChessGamePiece.WHITE
+                ? (pieceRow - 1)
+                : (pieceRow + 1);
+        int count = 1;
+        int maxIter = notMoved ? 2 : 1;
+        // check for normal moves
+        while (count <= maxIter) { // only loop while we have open slots and have not passed our
+            // limit
+            if (isOnScreen(currRow, pieceColumn)
+                    && board.getCell(currRow,
+                            pieceColumn).getPieceOnSquare() == null) {
+                moves.add(currRow + "," + pieceColumn);
             } else {
-                if (isEnemy(board, pieceRow + 1, pieceColumn - 1)) {
-                    moves.add((pieceRow + 1) + "," + (pieceColumn - 1));
-                }
-                if (isEnemy(board, pieceRow + 1, pieceColumn + 1)) {
-                    moves.add((pieceRow + 1) + "," + (pieceColumn + 1));
-                }
+                break;
+            }
+            currRow = (getColorOfPiece() == ChessGamePiece.WHITE)
+                    ? (currRow - 1)
+                    : (currRow + 1);
+            count++;
+        }
+        // check for enemy capture points
+        if (getColorOfPiece() == ChessGamePiece.WHITE) {
+            if (isEnemy(board, pieceRow - 1, pieceColumn - 1)) {
+                moves.add((pieceRow - 1) + "," + (pieceColumn - 1));
+            }
+            if (isEnemy(board, pieceRow - 1, pieceColumn + 1)) {
+                moves.add((pieceRow - 1) + "," + (pieceColumn + 1));
+            }
+        } else {
+            if (isEnemy(board, pieceRow + 1, pieceColumn - 1)) {
+                moves.add((pieceRow + 1) + "," + (pieceColumn - 1));
+            }
+            if (isEnemy(board, pieceRow + 1, pieceColumn + 1)) {
+                moves.add((pieceRow + 1) + "," + (pieceColumn + 1));
             }
         }
         return moves;
@@ -130,15 +131,13 @@ public class Pawn
      */
     @Override
     public ImageIcon createImageByPieceType() {
-        if (getColorOfPiece() == ChessGamePiece.WHITE) {
-            return new ImageIcon(
-                    getClass().getResource("chessImages/WhitePawn.gif"));
-        } else if (getColorOfPiece() == ChessGamePiece.BLACK) {
-            return new ImageIcon(
-                    getClass().getResource("chessImages/BlackPawn.gif"));
-        } else {
-            return new ImageIcon(
-                    getClass().getResource("chessImages/default-Unassigned.gif"));
-        }
+        return switch (getColorOfPiece()) {
+            case ChessGamePiece.WHITE -> new ImageIcon(
+                    getClass().getResource("../../resources/chessImages/WhitePawn.gif"));
+            case ChessGamePiece.BLACK -> new ImageIcon(
+                    getClass().getResource("../../resources/chessImages/BlackPawn.gif"));
+            default -> new ImageIcon(
+                    getClass().getResource("../../resources/chessImages/default-Unassigned.gif"));
+        };
     }
 }

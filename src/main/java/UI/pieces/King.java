@@ -1,10 +1,8 @@
-package UI.pieces;
+package ui.pieces;
+
+import ui.board.ChessGameBoard;
 
 import javax.swing.ImageIcon;
-
-import UI.ChessGamePiece;
-import UI.board.ChessGameBoard;
-
 import java.util.ArrayList;
 
 // -------------------------------------------------------------------------
@@ -41,28 +39,11 @@ public class King
      *
      * @param board
      *              the game board to calculate moves on
-     * @return ArrayList<String> the moves
+     * @return ArrayList<> the moves
      */
     @Override
     protected ArrayList<String> calculatePossibleMoves(ChessGameBoard board) {
-        ArrayList<String> northEastMoves = calculateNorthEastMoves(board, 1);
-        ArrayList<String> northWestMoves = calculateNorthWestMoves(board, 1);
-        ArrayList<String> southEastMoves = calculateSouthEastMoves(board, 1);
-        ArrayList<String> southWestMoves = calculateSouthWestMoves(board, 1);
-        ArrayList<String> northMoves = calculateNorthMoves(board, 1);
-        ArrayList<String> southMoves = calculateSouthMoves(board, 1);
-        ArrayList<String> eastMoves = calculateEastMoves(board, 1);
-        ArrayList<String> westMoves = calculateWestMoves(board, 1);
-        ArrayList<String> allMoves = new ArrayList<>();
-        allMoves.addAll(northEastMoves);
-        allMoves.addAll(northWestMoves);
-        allMoves.addAll(southWestMoves);
-        allMoves.addAll(southEastMoves);
-        allMoves.addAll(northMoves);
-        allMoves.addAll(southMoves);
-        allMoves.addAll(westMoves);
-        allMoves.addAll(eastMoves);
-        return allMoves;
+        return generateMoves(board, 1);
     }
 
     /**
@@ -73,7 +54,7 @@ public class King
      * @return true if checked, false if not checked
      */
     public boolean isChecked(ChessGameBoard board) {
-        return getCurrentAttackers(board).size() > 0;
+        return !getCurrentAttackers(board).isEmpty();
     }
 
     /**
@@ -83,15 +64,13 @@ public class King
      */
     @Override
     public ImageIcon createImageByPieceType() {
-        if (getColorOfPiece() == ChessGamePiece.WHITE) {
-            return new ImageIcon(
-                    getClass().getResource("chessImages/WhiteKing.gif"));
-        } else if (getColorOfPiece() == ChessGamePiece.BLACK) {
-            return new ImageIcon(
-                    getClass().getResource("chessImages/BlackKing.gif"));
-        } else {
-            return new ImageIcon(
-                    getClass().getResource("chessImages/default-Unassigned.gif"));
-        }
+        return switch (getColorOfPiece()) {
+            case ChessGamePiece.WHITE -> new ImageIcon(
+                    getClass().getResource("../../resources/chessImages/WhiteKing.gif"));
+            case ChessGamePiece.BLACK -> new ImageIcon(
+                    getClass().getResource("../../resources/chessImages/BlackKing.gif"));
+            default -> new ImageIcon(
+                    getClass().getResource("../../resources/chessImages/default-Unassigned.gif"));
+        };
     }
 }

@@ -3,7 +3,7 @@ package logic;
 import java.awt.GridLayout;
 import javax.swing.*;
 
-import UI.ChessGamePiece;
+import ui.pieces.ChessGamePiece;
 
 // -------------------------------------------------------------------------
 /**
@@ -16,7 +16,7 @@ import UI.ChessGamePiece;
  */
 public class ChessGraveyard
         extends JPanel {
-    private String title;
+    private final String title;
 
     // ----------------------------------------------------------
     /**

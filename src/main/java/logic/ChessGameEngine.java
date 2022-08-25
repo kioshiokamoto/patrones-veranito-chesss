@@ -1,16 +1,17 @@
 package logic;
 
-import java.util.ArrayList;
+import java.util.List;
 import java.awt.Color;
 import javax.swing.JOptionPane;
 
-import UI.ChessGamePiece;
-import UI.ChessPanel;
-import UI.board.BoardSquare;
-import UI.board.ChessGameBoard;
-import UI.pieces.King;
+import ui.ChessPanel;
+import ui.board.BoardSquare;
+import ui.board.ChessGameBoard;
+import ui.pieces.ChessGamePiece;
+import ui.pieces.King;
 
 import java.awt.event.MouseEvent;
+import java.io.Serializable;
 
 // -------------------------------------------------------------------------
 /**
@@ -22,11 +23,11 @@ import java.awt.event.MouseEvent;
  * @author Danielle Bushrow (dbushrow)
  * @version 2010.11.17
  */
-public class ChessGameEngine {
+public class ChessGameEngine implements Serializable {
     private ChessGamePiece currentPiece;
     private boolean firstClick;
     private int currentPlayer;
-    private ChessGameBoard board;
+    private final ChessGameBoard board;
     private King king1;
     private King king2;
 
@@ -98,13 +99,13 @@ public class ChessGameEngine {
      * @return boolean true if the player does have legal moves, false otherwise
      */
     public boolean playerHasLegalMoves(int playerNum) {
-        ArrayList<ChessGamePiece> pieces;
-        if (playerNum == 1) {
-            pieces = board.getAllWhitePieces();
-        } else if (playerNum == 2) {
-            pieces = board.getAllBlackPieces();
-        } else {
-            return false;
+        List<ChessGamePiece> pieces;
+        switch (playerNum) {
+            case 1 -> pieces = board.getAllWhitePieces();
+            case 2 -> pieces = board.getAllBlackPieces();
+            default -> {
+                return false;
+            }
         }
         for (ChessGamePiece currPiece : pieces) {
             if (currPiece.hasLegalMoves(board)) {
@@ -127,17 +128,10 @@ public class ChessGameEngine {
         }
         if (currentPlayer == 2) // black player
         {
-            if (currentPiece.getColorOfPiece() == ChessGamePiece.BLACK) {
-                return true;
-            }
-            return false;
-        } else
-        // white player
+            return (currentPiece.getColorOfPiece() == ChessGamePiece.BLACK);
+        } else // white player
         {
-            if (currentPiece.getColorOfPiece() == ChessGamePiece.WHITE) {
-                return true;
-            }
-            return false;
+            return (currentPiece.getColorOfPiece() == ChessGamePiece.WHITE);
         }
     }
 
@@ -179,7 +173,6 @@ public class ChessGameEngine {
             reset();
         } else {
             board.resetBoard(false);
-            // System.exit(0);
         }
     }
 
@@ -264,22 +257,22 @@ public class ChessGameEngine {
                 currentPiece.showLegalMoves(board);
                 squareClicked.setBackground(Color.GREEN);
                 firstClick = false;
+                return;
+            }
+            if (currentPiece != null) {
+                JOptionPane.showMessageDialog(
+                        squareClicked,
+                        "You tried to pick up the other player's piece! "
+                                + "Get some glasses and pick a valid square.",
+                        "Illegal move",
+                        JOptionPane.ERROR_MESSAGE);
             } else {
-                if (currentPiece != null) {
-                    JOptionPane.showMessageDialog(
-                            squareClicked,
-                            "You tried to pick up the other player's piece! "
-                                    + "Get some glasses and pick a valid square.",
-                            "Illegal move",
-                            JOptionPane.ERROR_MESSAGE);
-                } else {
-                    JOptionPane.showMessageDialog(
-                            squareClicked,
-                            "You tried to pick up an empty square! "
-                                    + "Get some glasses and pick a valid square.",
-                            "Illegal move",
-                            JOptionPane.ERROR_MESSAGE);
-                }
+                JOptionPane.showMessageDialog(
+                        squareClicked,
+                        "You tried to pick up an empty square! "
+                                + "Get some glasses and pick a valid square.",
+                        "Illegal move",
+                        JOptionPane.ERROR_MESSAGE);
             }
         } else {
             if (pieceOnSquare == null ||

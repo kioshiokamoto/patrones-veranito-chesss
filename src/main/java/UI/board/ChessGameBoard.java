@@ -1,19 +1,21 @@
-package UI.board;
+package ui.board;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.io.Serializable;
 import java.awt.Color;
 import javax.swing.JPanel;
 
-import UI.ChessGamePiece;
-import UI.ChessPanel;
-import UI.pieces.Bishop;
-import UI.pieces.King;
-import UI.pieces.Knight;
-import UI.pieces.Pawn;
-import UI.pieces.Queen;
-import UI.pieces.Rook;
+import ui.ChessPanel;
+import ui.pieces.Bishop;
+import ui.pieces.ChessGamePiece;
+import ui.pieces.King;
+import ui.pieces.Knight;
+import ui.pieces.Pawn;
+import ui.pieces.Queen;
+import ui.pieces.Rook;
 
 import java.awt.GridLayout;
 
@@ -29,7 +31,7 @@ import java.awt.GridLayout;
  */
 public class ChessGameBoard extends JPanel {
     private BoardSquare[][] chessCells;
-    private BoardListener listener;
+    private final BoardListener listener;
 
     // ----------------------------------------------------------
     /**
@@ -90,9 +92,9 @@ public class ChessGameBoard extends JPanel {
     /**
      * Gets all the white game pieces on the board.
      *
-     * @return ArrayList<GamePiece> the pieces
+     * @return List<> the pieces
      */
-    public ArrayList<ChessGamePiece> getAllWhitePieces() {
+    public List<ChessGamePiece> getAllWhitePieces() {
         ArrayList<ChessGamePiece> whitePieces = new ArrayList<>();
         for (int i = 0; i < 8; i++) {
             for (int j = 0; j < 8; j++) {
@@ -109,9 +111,9 @@ public class ChessGameBoard extends JPanel {
     /**
      * Gets all the black pieces on the board
      *
-     * @return ArrayList<GamePiece> the pieces
+     * @return ArrayList<> the pieces
      */
-    public ArrayList<ChessGamePiece> getAllBlackPieces() {
+    public List<ChessGamePiece> getAllBlackPieces() {
         ArrayList<ChessGamePiece> blackPieces = new ArrayList<>();
         for (int i = 0; i < 8; i++) {
             for (int j = 0; j < 8; j++) {
@@ -175,34 +177,29 @@ public class ChessGameBoard extends JPanel {
      * (Re)initializes this ChessGameBoard to its default layout with all 32
      * pieces added.
      */
-    public void initializeBoard() {
+    public final void initializeBoard() {
         resetBoard(false);
         for (int i = 0; i < chessCells.length; i++) {
             for (int j = 0; j < chessCells[0].length; j++) {
                 ChessGamePiece pieceToAdd;
-                if (i == 1) // black pawns
-                {
-                    pieceToAdd = new Pawn(this, i, j, ChessGamePiece.BLACK);
-                } else if (i == 6) // white pawns
-                {
-                    pieceToAdd = new Pawn(this, i, j, ChessGamePiece.WHITE);
-                } else if (i == 0 || i == 7) // main rows
-                {
-                    int colNum = i == 0 ? ChessGamePiece.BLACK : ChessGamePiece.WHITE;
-                    if (j == 0 || j == 7) {
-                        pieceToAdd = new Rook(this, i, j, colNum);
-                    } else if (j == 1 || j == 6) {
-                        pieceToAdd = new Knight(this, i, j, colNum);
-                    } else if (j == 2 || j == 5) {
-                        pieceToAdd = new Bishop(this, i, j, colNum);
-                    } else if (j == 3) {
-                        pieceToAdd = new King(this, i, j, colNum);
-                    } else {
-                        pieceToAdd = new Queen(this, i, j, colNum);
+                switch (i) {
+                    case 1 -> pieceToAdd = new Pawn(this, i, j, ChessGamePiece.BLACK);
+                    case 6 -> pieceToAdd = new Pawn(this, i, j, ChessGamePiece.WHITE);
+                    case 0, 7 -> {
+                        int colNum = i == 0 ? ChessGamePiece.BLACK : ChessGamePiece.WHITE;
+                        pieceToAdd = switch (j) {
+                            case 0, 7 -> new Rook(this, i, j, colNum);
+                            case 1, 6 -> new Knight(this, i, j, colNum);
+                            case 2, 5 -> new Bishop(this, i, j, colNum);
+                            case 3 -> new King(this, i, j, colNum);
+                            default -> new Queen(this, i, j, colNum);
+                        };
                     }
-                } else {
-                    pieceToAdd = null;
+                    default -> pieceToAdd = null;
                 }
+                // black pawns
+                // white pawns
+                // main rows
                 chessCells[i][j] = new BoardSquare(i, j, pieceToAdd);
                 if ((i + j) % 2 == 0) {
                     chessCells[i][j].setBackground(Color.WHITE);
@@ -240,13 +237,14 @@ public class ChessGameBoard extends JPanel {
      * @version 2010.11.16
      */
     private class BoardListener
-            implements MouseListener {
+            implements MouseListener, Serializable {
         /**
          * Do an action when the left mouse button is clicked.
          *
          * @param e
          *          the event from the listener
          */
+        @Override
         public void mouseClicked(MouseEvent e) {
             if (e.getButton() == MouseEvent.BUTTON1 &&
                     getParent() instanceof ChessPanel) {
@@ -261,6 +259,7 @@ public class ChessGameBoard extends JPanel {
          * @param e
          *          the mouse event from the listener
          */
+        @Override
         public void mouseEntered(MouseEvent e) { /* not used */
         }
 
@@ -270,6 +269,7 @@ public class ChessGameBoard extends JPanel {
          * @param e
          *          the mouse event from the listener
          */
+        @Override
         public void mouseExited(MouseEvent e) { /* not used */
         }
 
@@ -279,6 +279,7 @@ public class ChessGameBoard extends JPanel {
          * @param e
          *          the mouse event from the listener
          */
+        @Override
         public void mousePressed(MouseEvent e) { /* not used */
         }
 
@@ -288,6 +289,7 @@ public class ChessGameBoard extends JPanel {
          * @param e
          *          the mouse event from the listener
          */
+        @Override
         public void mouseReleased(MouseEvent e) { /* not used */
         }
     }
