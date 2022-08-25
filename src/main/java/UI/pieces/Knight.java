@@ -1,9 +1,8 @@
-package UI.pieces;
+package ui.pieces;
 
 import javax.swing.ImageIcon;
 
-import UI.ChessGamePiece;
-import UI.board.ChessGameBoard;
+import ui.board.ChessGameBoard;
 
 import java.util.ArrayList;
 
@@ -89,7 +88,7 @@ public class Knight
      *
      * @param board
      *              the game board to check
-     * @return ArrayList<String> the list of possible moves
+     * @return ArrayList<> the list of possible moves
      */
     @Override
     protected ArrayList<String> calculatePossibleMoves(ChessGameBoard board) {
@@ -108,15 +107,13 @@ public class Knight
      */
     @Override
     public ImageIcon createImageByPieceType() {
-        if (getColorOfPiece() == ChessGamePiece.WHITE) {
-            return new ImageIcon(
-                    getClass().getResource("chessImages/WhiteKnight.gif"));
-        } else if (getColorOfPiece() == ChessGamePiece.BLACK) {
-            return new ImageIcon(
-                    getClass().getResource("chessImages/BlackKnight.gif"));
-        } else {
-            return new ImageIcon(
-                    getClass().getResource("chessImages/default-Unassigned.gif"));
-        }
+        return switch (getColorOfPiece()) {
+            case ChessGamePiece.WHITE -> new ImageIcon(
+                    getClass().getResource("../../resources/chessImages/WhiteKnight.gif"));
+            case ChessGamePiece.BLACK -> new ImageIcon(
+                    getClass().getResource("../../resources/chessImages/BlackKnight.gif"));
+            default -> new ImageIcon(
+                    getClass().getResource("../../resources/chessImages/default-Unassigned.gif"));
+        };
     }
 }

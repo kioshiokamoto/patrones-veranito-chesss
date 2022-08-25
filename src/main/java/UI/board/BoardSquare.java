@@ -1,9 +1,9 @@
-package UI.board;
+package ui.board;
 
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
-import UI.ChessGamePiece;
+import ui.pieces.ChessGamePiece;
 
 // -------------------------------------------------------------------------
 /**
@@ -16,8 +16,8 @@ import UI.ChessGamePiece;
  */
 public class BoardSquare
         extends JPanel {
-    private int row;
-    private int col;
+    private final int row;
+    private final int col;
     private ChessGamePiece piece;
     private JLabel imageLabel;
 
